@@ -7,7 +7,7 @@ using MicroInventory.Shared.Common.Response;
 
 namespace MicroInventory.Category.Api.Application.CommandHandlers
 {
-    public class CreateCategoriesCommandHandler(ICategoryRepository categoryRepository, IUnitOfWork unitOfWork,ILogger<CreateCategoriesCommandHandler> logger) : IRequestHandler<CreateCategoriesCommand, Result>
+    public class CreateCategoriesCommandHandler(ICategoryRepository categoryRepository, IUnitOfWork unitOfWork, ILogger<CreateCategoriesCommandHandler> logger) : IRequestHandler<CreateCategoriesCommand, Result>
     {
         private readonly ICategoryRepository _categoryRepository = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
         private readonly IUnitOfWork _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));

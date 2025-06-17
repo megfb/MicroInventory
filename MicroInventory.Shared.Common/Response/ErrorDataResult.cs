@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MicroInventory.Shared.Common.Response
+﻿namespace MicroInventory.Shared.Common.Response
 {
-    public class ErrorDataResult<T>:DataResult<T>
+    public class ErrorDataResult<T> : DataResult<T>
     {
         public ErrorDataResult(T data) : base(false, data)
         {

@@ -2,8 +2,6 @@
 using MicroInventory.Category.Api.Application.Commands;
 using MicroInventory.Category.Api.Application.Dtos;
 using MicroInventory.Category.Api.Application.Queries;
-using MicroInventory.Category.Api.Domain.Entities;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MicroInventory.Category.Api.Controllers
@@ -17,7 +15,6 @@ namespace MicroInventory.Category.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<CategoryDto>> CreateCategory(CreateCategoriesCommand command)
         {
-            ;
             return Ok(await _mediator.Send(command));
         }
 

@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using MicroInventory.Category.Api.Domain.Entities;
 using MicroInventory.Shared.Common.Response;
 
 namespace MicroInventory.Category.Api.Application.Commands

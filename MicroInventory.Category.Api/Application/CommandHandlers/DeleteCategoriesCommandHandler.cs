@@ -6,7 +6,7 @@ using MicroInventory.Shared.Common.Response;
 
 namespace MicroInventory.Category.Api.Application.CommandHandlers
 {
-    public class DeleteCategoriesCommandHandler(ICategoryRepository categoryRepository, IUnitOfWork unitOfWork,ILogger<DeleteCategoriesCommandHandler> logger) : IRequestHandler<DeleteCategoriesCommand, Result>
+    public class DeleteCategoriesCommandHandler(ICategoryRepository categoryRepository, IUnitOfWork unitOfWork, ILogger<DeleteCategoriesCommandHandler> logger) : IRequestHandler<DeleteCategoriesCommand, Result>
     {
         private readonly ICategoryRepository _categoryRepository = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
         private readonly IUnitOfWork _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
@@ -18,7 +18,7 @@ namespace MicroInventory.Category.Api.Application.CommandHandlers
             await _categoryRepository.DeleteAsync(category);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
             logger.LogInformation("category is deleted");
-            return new Result(true,"Category is deleted");
+            return new Result(true, "Category is deleted");
         }
     }
 }

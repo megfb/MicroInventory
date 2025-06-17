@@ -6,7 +6,7 @@ using MicroInventory.Shared.Common.Response;
 
 namespace MicroInventory.Category.Api.Application.QueryHandlers
 {
-    public class GetCategoryByIdQueryHandler(ICategoryRepository categoryRepository,ILogger<GetCategoryByIdQueryHandler> logger) : IRequestHandler<GetCategoryByIdQuery, IDataResult<CategoryDto>>
+    public class GetCategoryByIdQueryHandler(ICategoryRepository categoryRepository, ILogger<GetCategoryByIdQueryHandler> logger) : IRequestHandler<GetCategoryByIdQuery, IDataResult<CategoryDto>>
     {
         private readonly ICategoryRepository _categoryRepository = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
         public async Task<IDataResult<CategoryDto>> Handle(GetCategoryByIdQuery request, CancellationToken cancellationToken)

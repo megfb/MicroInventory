@@ -1,12 +1,11 @@
 using System.Reflection;
-using MicroInventory.Category.Api.Domain.Repositories.EntityFramework.DbContexts;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using MediatR;
-using MicroInventory.Category.Api.Domain.Repositories.EntityFramework;
-using MicroInventory.Category.Api.Domain.Repositories.Abstractions;
-using MicroInventory.Shared.Common.Domain;
 using MicroInventory.Category.Api.Domain.Repositories; // Ensure this namespace is included  
+using MicroInventory.Category.Api.Domain.Repositories.Abstractions;
+using MicroInventory.Category.Api.Domain.Repositories.EntityFramework;
+using MicroInventory.Category.Api.Domain.Repositories.EntityFramework.DbContexts;
+using MicroInventory.Shared.Common.Domain;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,7 +19,7 @@ builder.Services.AddDbContext<CategoryDbContext>(options =>
    options.UseNpgsql(builder.Configuration.GetConnectionString("PostgreSql")));
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));  
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 
 var app = builder.Build();
 

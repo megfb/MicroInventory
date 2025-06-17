@@ -13,7 +13,7 @@ namespace MicroInventory.Category.Api.Domain.Repositories.EntityFramework
             await context.Categories.AddAsync(categories);
             await unitOfWork.SaveChangesAsync();
             return categories;
-            
+
         }
 
         public async Task DeleteAsync(Categories categories)
