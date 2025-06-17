@@ -3,14 +3,15 @@ using MicroInventory.Category.Api.Application.Commands;
 using MicroInventory.Category.Api.Domain.Entities;
 using MicroInventory.Category.Api.Domain.Repositories.Abstractions;
 using MicroInventory.Shared.Common.Domain;
+using MicroInventory.Shared.Common.Response;
 
 namespace MicroInventory.Category.Api.Application.CommandHandlers
 {
-    public class CreateCategoriesCommandHandler(ICategoryRepository categoryRepository, IUnitOfWork unitOfWork,ILogger<CreateCategoriesCommandHandler> logger) : IRequestHandler<CreateCategoriesCommand, Guid>
+    public class CreateCategoriesCommandHandler(ICategoryRepository categoryRepository, IUnitOfWork unitOfWork,ILogger<CreateCategoriesCommandHandler> logger) : IRequestHandler<CreateCategoriesCommand, Result>
     {
         private readonly ICategoryRepository _categoryRepository = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
         private readonly IUnitOfWork _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
-        public async Task<Guid> Handle(CreateCategoriesCommand request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(CreateCategoriesCommand request, CancellationToken cancellationToken)
         {
             var category = new Categories
             {
@@ -22,7 +23,7 @@ namespace MicroInventory.Category.Api.Application.CommandHandlers
             await _categoryRepository.CreateAsync(category);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
             logger.LogInformation("New category is created");
-            return category.Id;
+            return new Result(true, "Category created successfully");
         }
     }
 }
