@@ -2,6 +2,7 @@
 using MicroInventory.Category.Api.Application.Commands;
 using MicroInventory.Category.Api.Application.Dtos;
 using MicroInventory.Category.Api.Application.Queries;
+using MicroInventory.Category.Api.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,35 +17,31 @@ namespace MicroInventory.Category.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<CategoryDto>> CreateCategory(CreateCategoriesCommand command)
         {
-            await _mediator.Send(command);
-            return Ok("Everything is ok");
+            ;
+            return Ok(await _mediator.Send(command));
         }
 
         [HttpPut("{id}")]
         public async Task<ActionResult<CategoryDto>> UpdateCategory(UpdateCategoriesCommand command)
         {
-            await _mediator.Send(command);
-            return Ok("Everything is ok");
+            return Ok(await _mediator.Send(command));
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult<CategoryDto>> DeleteCategory(Guid id)
         {
-            await _mediator.Send(new DeleteCategoriesCommand { Id = id });
-            return Ok("Everything is ok");
+            return Ok(await _mediator.Send(new DeleteCategoriesCommand { Id = id }));
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CategoryDto>>> GetAllCategories()
         {
-            var categories = await _mediator.Send(new GetCategoriesQuery());
-            return Ok(categories);
+            return Ok(await _mediator.Send(new GetCategoriesQuery()));
         }
         [HttpGet("Get/{id}")]
         public async Task<ActionResult<IEnumerable<CategoryDto>>> GetCategory(Guid id)
         {
-            var categories = await _mediator.Send(new GetCategoryByIdQuery { Id = id});
-            return Ok(categories);
+            return Ok(await _mediator.Send(new GetCategoryByIdQuery { Id = id }));
         }
     }
 }
