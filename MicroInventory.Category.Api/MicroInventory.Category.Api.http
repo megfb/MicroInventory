@@ -1,0 +1,6 @@
+@MicroInventory.Category.Api_HostAddress = http://localhost:5293
+
+GET {{MicroInventory.Category.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
