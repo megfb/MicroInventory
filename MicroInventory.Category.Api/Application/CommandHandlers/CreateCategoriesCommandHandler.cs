@@ -11,6 +11,7 @@ namespace MicroInventory.Category.Api.Application.CommandHandlers
     {
         private readonly ICategoryRepository _categoryRepository = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
         private readonly IUnitOfWork _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+        private readonly ILogger<CreateCategoriesCommandHandler> logger = logger ?? throw new ArgumentNullException(nameof(logger));
         public async Task<Result> Handle(CreateCategoriesCommand request, CancellationToken cancellationToken)
         {
             var category = new Categories

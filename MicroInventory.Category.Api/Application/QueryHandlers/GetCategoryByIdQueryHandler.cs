@@ -9,6 +9,7 @@ namespace MicroInventory.Category.Api.Application.QueryHandlers
     public class GetCategoryByIdQueryHandler(ICategoryRepository categoryRepository, ILogger<GetCategoryByIdQueryHandler> logger) : IRequestHandler<GetCategoryByIdQuery, IDataResult<CategoryDto>>
     {
         private readonly ICategoryRepository _categoryRepository = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
+        private readonly ILogger<GetCategoryByIdQueryHandler> logger = logger ?? throw new ArgumentNullException(nameof(logger));
         public async Task<IDataResult<CategoryDto>> Handle(GetCategoryByIdQuery request, CancellationToken cancellationToken)
         {
             var category = await _categoryRepository.GetByIdAsync(request.Id);

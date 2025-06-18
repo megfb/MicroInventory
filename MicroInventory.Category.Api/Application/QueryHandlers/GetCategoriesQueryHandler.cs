@@ -9,11 +9,12 @@ namespace MicroInventory.Category.Api.Application.QueryHandlers
     public class GetCategoriesQueryHandler(ICategoryRepository categoryRepository, ILogger<GetCategoriesQueryHandler> logger) : IRequestHandler<GetCategoriesQuery, IDataResult<IEnumerable<CategoryDto>>>
     {
         private readonly ICategoryRepository _categoryRepository = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
+        private readonly ILogger<GetCategoriesQueryHandler> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         public async Task<IDataResult<IEnumerable<CategoryDto>>> Handle(GetCategoriesQuery request, CancellationToken cancellationToken)
         {
             var categories = await _categoryRepository.GetAllAsync();
 
-            logger.LogInformation("All categories is gotten");
+            _logger.LogInformation("All categories is gotten");
 
             return new SuccessDataResult<IEnumerable<CategoryDto>>(categories.Select(c => new CategoryDto
             {
