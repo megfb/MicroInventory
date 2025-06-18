@@ -27,7 +27,7 @@ namespace MicroInventory.Category.Api.Domain.Repositories.EntityFramework
             return await context.Categories.OrderByDescending(x => x.Name).ToListAsync();
         }
 
-        public async Task<Categories> GetByIdAsync(Guid id)
+        public async Task<Categories> GetByIdAsync(string id)
         {
             return await context.Categories
                 .FirstOrDefaultAsync(x => x.Id == id)

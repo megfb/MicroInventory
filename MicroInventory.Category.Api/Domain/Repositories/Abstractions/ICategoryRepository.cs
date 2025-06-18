@@ -8,7 +8,7 @@ namespace MicroInventory.Category.Api.Domain.Repositories.Abstractions
         Task UpdateAsync(Categories categories);
         Task DeleteAsync(Categories categories);
         Task<IEnumerable<Categories>> GetAllAsync();
-        Task<Categories> GetByIdAsync(Guid id);
+        Task<Categories> GetByIdAsync(string id);
 
     }
 }

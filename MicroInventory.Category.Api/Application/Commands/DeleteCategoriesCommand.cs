@@ -5,7 +5,7 @@ namespace MicroInventory.Category.Api.Application.Commands
 {
     public class DeleteCategoriesCommand : IRequest<Result>
     {
-        public Guid Id { get; set; }
+        public string Id { get; set; }
 
     }
 }

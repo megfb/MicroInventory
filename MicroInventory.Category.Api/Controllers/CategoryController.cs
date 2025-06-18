@@ -25,7 +25,7 @@ namespace MicroInventory.Category.Api.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<CategoryDto>> DeleteCategory(Guid id)
+        public async Task<ActionResult<CategoryDto>> DeleteCategory(string id)
         {
             return Ok(await _mediator.Send(new DeleteCategoriesCommand { Id = id }));
         }
@@ -36,7 +36,7 @@ namespace MicroInventory.Category.Api.Controllers
             return Ok(await _mediator.Send(new GetCategoriesQuery()));
         }
         [HttpGet("Get/{id}")]
-        public async Task<ActionResult<IEnumerable<CategoryDto>>> GetCategory(Guid id)
+        public async Task<ActionResult<IEnumerable<CategoryDto>>> GetCategory(string id)
         {
             return Ok(await _mediator.Send(new GetCategoryByIdQuery { Id = id }));
         }

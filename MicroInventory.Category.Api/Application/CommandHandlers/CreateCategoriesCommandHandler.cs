@@ -16,7 +16,7 @@ namespace MicroInventory.Category.Api.Application.CommandHandlers
         {
             var category = new Categories
             {
-                Id = new Guid(),
+                Id = Guid.NewGuid().ToString(),
                 CreatedAt = DateTime.UtcNow,
                 Name = request.Name,
                 Description = request.Description,
