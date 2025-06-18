@@ -1,3 +1,11 @@
+using System.Reflection;
+using MicroInventory.Assignment.Api.Domain.Repositories;
+using MicroInventory.Assignment.Api.Domain.Repositories.Abstractions;
+using MicroInventory.Assignment.Api.Domain.Repositories.EntityFramwork;
+using MicroInventory.Assignment.Api.Domain.Repositories.EntityFramwork.DbContexts;
+using MicroInventory.Shared.Common.Domain;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,6 +14,11 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddDbContext<AssignmentDbContext>(options =>
+   options.UseNpgsql(builder.Configuration.GetConnectionString("PostgreSql")));
+builder.Services.AddScoped<IAssignmentRepository, AssignmentRepository>();
+builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 
 var app = builder.Build();
 

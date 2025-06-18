@@ -36,7 +36,7 @@ namespace MicroInventory.Category.Api.Controllers
             return Ok(await _mediator.Send(new GetCategoriesQuery()));
         }
         [HttpGet("Get/{id}")]
-        public async Task<ActionResult<IEnumerable<CategoryDto>>> GetCategory(string id)
+        public async Task<ActionResult<CategoryDto>> GetCategory(string id)
         {
             return Ok(await _mediator.Send(new GetCategoryByIdQuery { Id = id }));
         }
