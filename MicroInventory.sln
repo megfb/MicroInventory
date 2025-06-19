@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroInventory.Person.Api",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroInventory.Assignment.Api", "MicroInventory.Assignment.Api\MicroInventory.Assignment.Api.csproj", "{A3E1EC18-932F-4054-87D8-B5257F44DC58}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroInventory.User.Api", "MicroInventory.User.Api\MicroInventory.User.Api.csproj", "{2AE63629-24E3-4F66-926C-72979271DF17}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{A3E1EC18-932F-4054-87D8-B5257F44DC58}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A3E1EC18-932F-4054-87D8-B5257F44DC58}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A3E1EC18-932F-4054-87D8-B5257F44DC58}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2AE63629-24E3-4F66-926C-72979271DF17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2AE63629-24E3-4F66-926C-72979271DF17}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2AE63629-24E3-4F66-926C-72979271DF17}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2AE63629-24E3-4F66-926C-72979271DF17}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -55,6 +61,7 @@ Global
 		{5BDC83F0-71D4-4627-AACA-892A90C50542} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{46B36229-6B1A-4FAF-9AFA-7C0DE04FA755} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{A3E1EC18-932F-4054-87D8-B5257F44DC58} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{2AE63629-24E3-4F66-926C-72979271DF17} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {70118CE5-512A-4B53-979E-B0166EB357F6}
