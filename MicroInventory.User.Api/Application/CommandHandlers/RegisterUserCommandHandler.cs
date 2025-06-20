@@ -7,12 +7,12 @@ using MicroInventory.User.Api.Infrastructure.Abstractions;
 
 namespace MicroInventory.User.Api.Application.CommandHandlers
 {
-    public class RegisterUserCommandHandlers(IUserRepository userRepository, IUnitOfWork unitOfWork,
-        ILogger<RegisterUserCommandHandlers> logger, IJwtTokenGenerator jwtTokenGenerator,IPasswordHasher passwordHasher) : IRequestHandler<RegisterUserCommand, string>
+    public class RegisterUserCommandHandler(IUserRepository userRepository, IUnitOfWork unitOfWork,
+        ILogger<RegisterUserCommandHandler> logger, IJwtTokenGenerator jwtTokenGenerator,IPasswordHasher passwordHasher) : IRequestHandler<RegisterUserCommand, string>
     {
         private readonly IUserRepository _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
         private readonly IUnitOfWork _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
-        private readonly ILogger<RegisterUserCommandHandlers> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        private readonly ILogger<RegisterUserCommandHandler> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         private readonly IJwtTokenGenerator _jwtTokenGenerator = jwtTokenGenerator ?? throw new ArgumentNullException(nameof(jwtTokenGenerator));
         private readonly IPasswordHasher _passwordHasher = passwordHasher ?? throw new ArgumentNullException(nameof(passwordHasher));
         public async Task<string> Handle(RegisterUserCommand request, CancellationToken cancellationToken)

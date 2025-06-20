@@ -16,9 +16,8 @@ namespace MicroInventory.User.Api.Domain.Repositories.EntityFramework
 
         public async Task<Entities.User> GetByEmailAsync(string email)
         {
-            return await context.User
-                .FirstOrDefaultAsync(x => x.Email == email)
-                ?? throw new KeyNotFoundException($"User with email {email} not found.");
+            return await context.User.FirstOrDefaultAsync(x => x.Email == email);
+                
         }
 
         public async Task<Entities.User> GetByIdAsync(string id)
@@ -31,8 +30,7 @@ namespace MicroInventory.User.Api.Domain.Repositories.EntityFramework
         public async Task<Entities.User> GetByUsernameAsync(string username)
         {
             return await context.User
-                .FirstOrDefaultAsync(x => x.Username == username)
-                ?? throw new KeyNotFoundException($"User with username {username} not found.");
+                .FirstOrDefaultAsync(x => x.Username == username);
         }
     }
 }

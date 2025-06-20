@@ -1,7 +1,9 @@
-﻿using MediatR;
+﻿using System.Security.Claims;
+using MediatR;
 using MicroInventory.Product.Api.Application.Commands;
 using MicroInventory.Product.Api.Application.Dtos;
 using MicroInventory.Product.Api.Application.Queries;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,6 +14,7 @@ namespace MicroInventory.Product.Api.Controllers
     public class ProductController(IMediator mediator) : ControllerBase
     {
         private readonly IMediator _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+
         [HttpPost]
         public async Task<ActionResult<ProductDto>> CreateProduct(CreateProductsCommand command)
         {
@@ -22,6 +25,8 @@ namespace MicroInventory.Product.Api.Controllers
         {
             return Ok(await _mediator.Send(command));
         }
+
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<ActionResult<ProductDto>> DeleteProduct(string id)
         {
