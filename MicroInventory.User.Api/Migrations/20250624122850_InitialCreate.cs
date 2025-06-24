@@ -3,30 +3,29 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace MicroInventory.Assignment.Api.Migrations
+namespace MicroInventory.User.Api.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Assignments",
+                name: "User",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "text", nullable: false),
-                    ProductId = table.Column<string>(type: "text", nullable: false),
-                    PersonId = table.Column<string>(type: "text", nullable: false),
-                    AssignedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    ReturnedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    Notes = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
+                    Username = table.Column<string>(type: "text", nullable: false),
+                    Email = table.Column<string>(type: "text", nullable: false),
+                    PasswordHash = table.Column<string>(type: "text", nullable: false),
+                    Role = table.Column<string>(type: "text", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Assignments", x => x.Id);
+                    table.PrimaryKey("PK_User", x => x.Id);
                 });
         }
 
@@ -34,7 +33,7 @@ namespace MicroInventory.Assignment.Api.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Assignments");
+                name: "User");
         }
     }
 }

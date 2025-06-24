@@ -24,9 +24,8 @@ namespace MicroInventory.Category.Api.Migrations
 
             modelBuilder.Entity("MicroInventory.Category.Api.Domain.Entities.Categories", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");

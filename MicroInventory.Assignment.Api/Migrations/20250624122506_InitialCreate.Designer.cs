@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MicroInventory.Assignment.Api.Migrations
 {
     [DbContext(typeof(AssignmentDbContext))]
-    [Migration("20250618145637_Initial")]
-    partial class Initial
+    [Migration("20250624122506_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
