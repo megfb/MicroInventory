@@ -11,7 +11,7 @@ namespace MicroInventory.Shared.EventBus.Abstractions
     //servis içerisinde bu üç method kullanılacak. publish: bir eventi yayınlamak için, subscribe-unsubscribe bir topic'e abone olmak veya ayrılmak için varlar.
     public interface IEventBus
     {
-        Task PublishAsync<T>(string topicName, string subscriptionName) where T : IntegrationEvent;
+        Task PublishAsync<T>(T @event, string topicName) where T : IntegrationEvent;
 
         void Subscribe<T,TH>(string topicName, string subscriptionName)
             where T : IntegrationEvent
