@@ -7,10 +7,10 @@ using MicroInventory.Shared.EventBus.Abstractions;
 
 namespace MicroInventory.Shared.EventBus.Events
 {
-    public class ProductAddedIntegrationEvent:IntegrationEvent
+    public class CategoryCreatedIntegrationEvent:IntegrationEvent
     {
-        public string ProductId { get; set; }
-        public string ProductName { get; set; }
         public string CategoryId { get; set; }
+        public string Name { get; set; }
+
     }
 }

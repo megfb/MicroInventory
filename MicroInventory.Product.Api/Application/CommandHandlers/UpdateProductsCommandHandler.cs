@@ -16,11 +16,11 @@ namespace MicroInventory.Product.Api.Application.CommandHandlers
             var product = await _productRepository.GetByIdAsync(request.Id);
             if (product == null)
                 throw new KeyNotFoundException("Product not found");
-            
             product.Name = request.Name;
             product.Description = request.Description;
             product.Brand = request.Brand;
             product.Model = request.Model;
+            product.StockCount = request.StockCount;
             product.CategoryId = request.CategoryId;
             product.UpdatedAt = DateTime.UtcNow;
             await _productRepository.UpdateAsync(product);

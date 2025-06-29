@@ -26,19 +26,13 @@ namespace MicroInventory.Product.Api.Application.CommandHandlers
                 Description = request.Description,
                 Brand = request.Brand,
                 Model = request.Model,
-                CategoryId = request.CategoryId
+                CategoryId = request.CategoryId,
+                StockCount = request.StockCount
             };
 
             await _productRepository.CreateAsync(product);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
             _logger.LogInformation("New product is created with ID: {ProductId}", product.Id);
-            var @event = new ProductAddedIntegrationEvent
-            {
-                ProductId = product.Id,
-                ProductName = product.Name,
-                CategoryId = product.CategoryId
-            };
-            await _eventBus.PublishAsync(@event, "product-events-topic");
             return new Result(true, "Product created successfully");
         }
     }

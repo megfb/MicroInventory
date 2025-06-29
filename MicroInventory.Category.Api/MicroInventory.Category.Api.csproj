@@ -24,4 +24,8 @@
     <ProjectReference Include="..\MicroInventory.Shared.EventBus\MicroInventory.Shared.EventBus.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="IntegrationEvents\EventHandlers\" />
+  </ItemGroup>
+
 </Project>

@@ -2,16 +2,17 @@
 
 namespace MicroInventory.Product.Api.Domain.Entities
 {
-    public class Products:Entity<string>
+    public class Products : Entity<string>
     {
-        public string Name { get; set; } = null!;
+        public string Name { get; set; } = default!;
 
         public string? Description { get; set; }
 
-        public string Brand { get; set; } = null!;
+        public string Brand { get; set; } = default!;
 
-        public string Model { get; set; } = null!;
+        public string Model { get; set; } = default!;
+        public int StockCount { get; set; }
 
-        public string CategoryId { get; set; }
+        public string CategoryId { get; set; } = default!;
     }
 }

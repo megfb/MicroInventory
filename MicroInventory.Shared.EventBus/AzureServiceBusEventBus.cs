@@ -33,8 +33,9 @@ namespace MicroInventory.Shared.EventBus
             var message = new ServiceBusMessage(jsonMessage)
             {
                 Subject = typeof(T).Name,
-                MessageId = @event.Id.ToString()
+                MessageId = @event.Id.ToString(),
             };
+            message.ApplicationProperties["type"] = @event.GetType().Name;
 
             await sender.SendMessageAsync(message);
         }

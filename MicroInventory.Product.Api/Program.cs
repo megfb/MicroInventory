@@ -5,9 +5,11 @@ using MicroInventory.Product.Api.Domain.Repositories;
 using MicroInventory.Product.Api.Domain.Repositories.Abstractions;
 using MicroInventory.Product.Api.Domain.Repositories.EntityFramework;
 using MicroInventory.Product.Api.Domain.Repositories.EntityFramework.DbContexts;
+using MicroInventory.Product.Api.IntegrationEvents.EventHandlers;
 using MicroInventory.Shared.Common.Domain;
 using MicroInventory.Shared.EventBus;
 using MicroInventory.Shared.EventBus.Abstractions;
+using MicroInventory.Shared.EventBus.Events;
 using MicroInventory.Shared.EventBus.SubscriptionManagers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -25,6 +27,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ProductDbContext>(options =>
    options.UseNpgsql(builder.Configuration.GetConnectionString("PostgreSql")));
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+
+
+
 builder.Services.AddSingleton<ServiceBusClient>(sp =>
 {
     var config = sp.GetRequiredService<IConfiguration>();
@@ -35,6 +40,11 @@ builder.Services.AddSingleton<IEventBusSubscriptionManager>(sp =>
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddSingleton<IEventBus, AzureServiceBusEventBus>();
+builder.Services.AddTransient<CategoryCreatedEventHandler>();
+builder.Services.AddTransient<CategoryUpdatedEventHandler>();
+builder.Services.AddTransient<CategoryDeletedEventHandler>();
+builder.Services.AddHostedService<AzureServiceBusConsumer>();
+
 
 var jwtSettings = builder.Configuration
     .GetSection("JwtSettings")
@@ -88,6 +98,29 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 var app = builder.Build();
+
+
+//uygulama ayaða kalktýðýnda abone oluyoruz
+using (var scope = app.Services.CreateScope())
+{
+    var eventBus = scope.ServiceProvider.GetRequiredService<IEventBus>();
+    var config = scope.ServiceProvider.GetRequiredService<IConfiguration>();
+
+    eventBus.Subscribe<CategoryCreatedIntegrationEvent, CategoryCreatedEventHandler>(
+           topicName: "category-events-topic",
+        subscriptionName: "new-category-added-sub");
+    eventBus.Subscribe<CategoryUpdatedIntegrationEvent, CategoryUpdatedEventHandler>(
+    topicName: "category-events-topic",
+    subscriptionName: "category-updated-sub");
+
+    eventBus.Subscribe<CategoryDeletedIntegrationEvent, CategoryDeletedEventHandler>(
+        topicName: "category-events-topic",
+        subscriptionName: "category-deleted-sub");
+}
+
+
+
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

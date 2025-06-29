@@ -7,6 +7,7 @@
         public string? Description { get; set; }
         public string Brand { get; set; }
         public string Model { get; set; }
+        public int StockCount { get; set; }
         public string CategoryId { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
