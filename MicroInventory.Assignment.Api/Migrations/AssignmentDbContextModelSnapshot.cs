@@ -55,6 +55,34 @@ namespace MicroInventory.Assignment.Api.Migrations
 
                     b.ToTable("Assignments");
                 });
+
+            modelBuilder.Entity("MicroInventory.Assignment.Api.Domain.Entities.PersonReadModel", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Persons");
+                });
+
+            modelBuilder.Entity("MicroInventory.Assignment.Api.Domain.Entities.ProductReadModel", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Products");
+                });
 #pragma warning restore 612, 618
         }
     }

@@ -19,42 +19,67 @@ using Microsoft.OpenApi.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 builder.Services.AddDbContext<ProductDbContext>(options =>
-   options.UseNpgsql(builder.Configuration.GetConnectionString("PostgreSql")));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("PostgreSql")));
+
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
-
-
 
 builder.Services.AddSingleton<ServiceBusClient>(sp =>
 {
     var config = sp.GetRequiredService<IConfiguration>();
     return new ServiceBusClient(config["AzureServiceBus:ConnectionString"]);
 });
+
 builder.Services.AddSingleton<IEventBusSubscriptionManager>(sp =>
     new InMemoryEventBusSubscriptionManager(eventName => eventName));
+
+builder.Services.AddSingleton<IEventBus, AzureServiceBusEventBus>();
+
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddSingleton<IEventBus, AzureServiceBusEventBus>();
+
+// Integration Event Handler'lar
 builder.Services.AddTransient<CategoryCreatedEventHandler>();
 builder.Services.AddTransient<CategoryUpdatedEventHandler>();
 builder.Services.AddTransient<CategoryDeletedEventHandler>();
+
+// Hosted service (consumer)
 builder.Services.AddHostedService<AzureServiceBusConsumer>();
 
-
+// JWT Ayarlarý
 var jwtSettings = builder.Configuration
     .GetSection("JwtSettings")
     .Get<JwtSettingsCommon>();
 
 builder.Services.Configure<JwtSettingsCommon>(
     builder.Configuration.GetSection("JwtSettings"));
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+
+            ValidIssuer = jwtSettings.Issuer,
+            ValidAudience = jwtSettings.Audience,
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(jwtSettings.Secret)),
+
+            ClockSkew = TimeSpan.Zero
+        };
+    });
+
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new() { Title = "Inventory API", Version = "v1" });
+    c.SwaggerDoc("v1", new() { Title = "Product API", Version = "v1" });
 
     var securityScheme = new OpenApiSecurityScheme
     {
@@ -78,51 +103,17 @@ builder.Services.AddSwaggerGen(c =>
         { securityScheme, Array.Empty<string>() }
     });
 });
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-
-            ValidIssuer = jwtSettings.Issuer,
-            ValidAudience = jwtSettings.Audience,
-            IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(jwtSettings.Secret)),
-
-            ClockSkew = TimeSpan.Zero
-        };
-    });
 
 var app = builder.Build();
-
-
-//uygulama ayaða kalktýðýnda abone oluyoruz
 using (var scope = app.Services.CreateScope())
 {
     var eventBus = scope.ServiceProvider.GetRequiredService<IEventBus>();
-    var config = scope.ServiceProvider.GetRequiredService<IConfiguration>();
 
-    eventBus.Subscribe<CategoryCreatedIntegrationEvent, CategoryCreatedEventHandler>(
-           topicName: "category-events-topic",
-        subscriptionName: "new-category-added-sub");
-    eventBus.Subscribe<CategoryUpdatedIntegrationEvent, CategoryUpdatedEventHandler>(
-    topicName: "category-events-topic",
-    subscriptionName: "category-updated-sub");
-
-    eventBus.Subscribe<CategoryDeletedIntegrationEvent, CategoryDeletedEventHandler>(
-        topicName: "category-events-topic",
-        subscriptionName: "category-deleted-sub");
+    eventBus.Subscribe<CategoryCreatedIntegrationEvent, CategoryCreatedEventHandler>();
+    eventBus.Subscribe<CategoryUpdatedIntegrationEvent, CategoryUpdatedEventHandler>();
+    eventBus.Subscribe<CategoryDeletedIntegrationEvent, CategoryDeletedEventHandler>();
 }
 
-
-
-
-
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

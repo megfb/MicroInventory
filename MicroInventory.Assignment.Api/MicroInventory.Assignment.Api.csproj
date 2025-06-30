@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MicroInventory.Shared.Common\MicroInventory.Shared.Common.csproj" />
+    <ProjectReference Include="..\MicroInventory.Shared.EventBus\MicroInventory.Shared.EventBus.csproj" />
   </ItemGroup>
 
 </Project>

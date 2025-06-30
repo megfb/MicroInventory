@@ -9,12 +9,10 @@ namespace MicroInventory.Product.Api.IntegrationEvents.EventHandlers
         private readonly ProductDbContext _productDbContext = productDbContext ?? throw new ArgumentNullException(nameof(productDbContext));
         public async Task Handle(CategoryUpdatedIntegrationEvent @event)
         {
-            Console.WriteLine("GÜNCELLEME İŞLEMİ TAMAMLANDI");
 
             var category = _productDbContext.Categories.FirstOrDefault(x => x.Id == @event.CategoryId);
             if (category != null)
             {
-                Console.WriteLine("GÜNCELLEME İŞLEMİ TAMAMLANDI");
 
                 category.Name = @event.Name;
                 _productDbContext.Categories.Update(category);

@@ -1,10 +1,15 @@
 ﻿using System.Text;
 using System.Text.Json;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Azure.Messaging.ServiceBus;
 using MicroInventory.Shared.EventBus.Abstractions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+
 
 namespace MicroInventory.Shared.EventBus
 {
@@ -13,8 +18,6 @@ namespace MicroInventory.Shared.EventBus
         private readonly List<ServiceBusProcessor> _processors = [];
         private readonly IEventBusSubscriptionManager _subscriptionManager;
         private readonly IServiceProvider _serviceProvider;
-
-        private readonly List<(string TopicName, string SubscriptionName)> _subscriptions;
 
         public AzureServiceBusConsumer(
             ServiceBusClient client,
@@ -25,16 +28,16 @@ namespace MicroInventory.Shared.EventBus
             _subscriptionManager = subscriptionManager;
             _serviceProvider = serviceProvider;
 
-            // Burada istediğin kadar sub ekleyebilirsin:
-            _subscriptions = new()
-            {
-                ("category-events-topic", "new-category-added-sub"),
-                ("category-events-topic", "category-updated-sub"),
-                ("category-events-topic", "category-deleted-sub"),
-            };
+            // appsettings.json'dan Subscription listesi alınır
+            var subscriptionConfigs = configuration
+                .GetSection("AzureServiceBus:Subscriptions")
+                .Get<List<SubscriptionConfig>>();
 
-            foreach (var (topic, sub) in _subscriptions)
+            foreach (var item in subscriptionConfigs)
             {
+                var topic = item.Topic;
+                var sub = item.Subscription;
+
                 var processor = client.CreateProcessor(topic, sub, new ServiceBusProcessorOptions
                 {
                     AutoCompleteMessages = false,
@@ -106,5 +109,12 @@ namespace MicroInventory.Shared.EventBus
 
             await base.StopAsync(cancellationToken);
         }
+    }
+
+    // Bu sınıfı istersen ayrı dosyaya da alabilirsin
+    public class SubscriptionConfig
+    {
+        public string Topic { get; set; }
+        public string Subscription { get; set; }
     }
 }

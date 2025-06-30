@@ -11,8 +11,6 @@ namespace MicroInventory.Product.Api.Domain.Entities
         public string Brand { get; set; } = default!;
 
         public string Model { get; set; } = default!;
-        public int StockCount { get; set; }
-
         public string CategoryId { get; set; } = default!;
     }
 }

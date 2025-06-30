@@ -1,28 +1,69 @@
 using System.Reflection;
+using Azure.Messaging.ServiceBus;
 using MicroInventory.Assignment.Api.Domain.Repositories;
 using MicroInventory.Assignment.Api.Domain.Repositories.Abstractions;
 using MicroInventory.Assignment.Api.Domain.Repositories.EntityFramwork;
 using MicroInventory.Assignment.Api.Domain.Repositories.EntityFramwork.DbContexts;
+using MicroInventory.Assignment.Api.Application.IntegrationEvents.EventHandlers;
 using MicroInventory.Shared.Common.Domain;
+using MicroInventory.Shared.EventBus;
+using MicroInventory.Shared.EventBus.Abstractions;
+using MicroInventory.Shared.EventBus.Events;
+using MicroInventory.Shared.EventBus.SubscriptionManagers;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
+// Controllers & Swagger
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// DbContext
 builder.Services.AddDbContext<AssignmentDbContext>(options =>
    options.UseNpgsql(builder.Configuration.GetConnectionString("PostgreSql")));
+
+// Azure Service Bus client
+builder.Services.AddSingleton<ServiceBusClient>(sp =>
+{
+    var config = sp.GetRequiredService<IConfiguration>();
+    return new ServiceBusClient(config["AzureServiceBus:ConnectionString"]);
+});
+
+// Event Bus ve handler'lar
+builder.Services.AddSingleton<IEventBusSubscriptionManager>(
+    sp => new InMemoryEventBusSubscriptionManager(eventName => eventName));
+builder.Services.AddSingleton<IEventBus, AzureServiceBusEventBus>();
+builder.Services.AddHostedService<AzureServiceBusConsumer>();
+
+// Repository & UoW
 builder.Services.AddScoped<IAssignmentRepository, AssignmentRepository>();
-builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+// Integration Event Handler'lar
+builder.Services.AddTransient<ProductAddedEventHandler>();
+builder.Services.AddTransient<ProductUpdatedEventHandler>();
+builder.Services.AddTransient<ProductDeletedEventHandler>();
+builder.Services.AddTransient<PersonAddedEventHandler>();
+builder.Services.AddTransient<PersonUpdatedEventHandler>();
+builder.Services.AddTransient<PersonDeletedEventHandler>();
+
+// MediatR
+builder.Services.AddMediatR(cfg =>
+    cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 
 var app = builder.Build();
+using (var scope = app.Services.CreateScope())
+{
+    var eventBus = scope.ServiceProvider.GetRequiredService<IEventBus>();
 
-// Configure the HTTP request pipeline.
+    eventBus.Subscribe<ProductAddedIntegrationEvent, ProductAddedEventHandler>();
+    eventBus.Subscribe<ProductUpdatedIntegrationEvent, ProductUpdatedEventHandler>();
+    eventBus.Subscribe<ProductDeletedIntegrationEvent, ProductDeletedEventHandler>();
+    eventBus.Subscribe<PersonAddedIntegrationEvent, PersonAddedEventHandler>();
+    eventBus.Subscribe<PersonUpdatedIntegrationEvent, PersonUpdatedEventHandler>();
+    eventBus.Subscribe<PersonDeletedIntegrationEvent, PersonDeletedEventHandler>();
+}
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -30,9 +71,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();

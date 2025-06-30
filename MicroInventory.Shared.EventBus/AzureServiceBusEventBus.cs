@@ -40,7 +40,7 @@ namespace MicroInventory.Shared.EventBus
             await sender.SendMessageAsync(message);
         }
 
-        public void Subscribe<T, TH>(string topicName, string subscriptionName)
+        public void Subscribe<T, TH>()
             where T : IntegrationEvent
             where TH : IIntegrationEventHandler<T>
         {

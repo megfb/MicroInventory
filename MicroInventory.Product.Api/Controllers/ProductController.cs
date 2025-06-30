@@ -26,7 +26,7 @@ namespace MicroInventory.Product.Api.Controllers
             return Ok(await _mediator.Send(command));
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpDelete("{id}")]
         public async Task<ActionResult<ProductDto>> DeleteProduct(string id)
         {

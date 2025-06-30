@@ -13,7 +13,7 @@ namespace MicroInventory.Shared.EventBus.Abstractions
     {
         Task PublishAsync<T>(T @event, string topicName) where T : IntegrationEvent;
 
-        void Subscribe<T,TH>(string topicName, string subscriptionName)
+        void Subscribe<T,TH>()
             where T : IntegrationEvent
             where TH : IIntegrationEventHandler<T>;
         void Unsubscribe<T, TH>(string topicName, string subscriptionName)
