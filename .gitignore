@@ -365,3 +365,4 @@ FodyWeavers.xsd
 /MicroInventory.Product.Api/appsettings.json
 /MicroInventory.Person.Api/appsettings.json
 /MicroInventory.Assignment.Api/appsettings.json
+/MicroInventory.Stock.Api/appsettings.json
