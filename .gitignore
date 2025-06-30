@@ -363,3 +363,5 @@ MigrationBackup/
 FodyWeavers.xsd
 /MicroInventory.Category.Api/appsettings.json
 /MicroInventory.Product.Api/appsettings.json
+/MicroInventory.Person.Api/appsettings.json
+/MicroInventory.Assignment.Api/appsettings.json
